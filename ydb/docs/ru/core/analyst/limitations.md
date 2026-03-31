@@ -240,12 +240,21 @@ WHERE e.user_id = p.user_id
 
 Список ограничений:
 
+<<<<<<< HEAD
 - [ClickHouse](../concepts/federated_query/clickhouse.md#ogranicheniya)
 - [Greenplum](../concepts/federated_query/greenplum.md#ogranicheniya)
 - [Microsoft SQL Server](../concepts/federated_query/ms_sql_server.md#ogranicheniya)
 - [MySQL](../concepts/federated_query/mysql.md#ogranicheniya)
 - [PostgreSQL](../concepts/federated_query/postgresql.md#ogranicheniya)
 - [YDB](../concepts/federated_query/ydb.md#ogranicheniya)
+=======
+- [ClickHouse](../concepts/query_execution/federated_query/clickhouse.md#limitations)
+- [Greenplum](../concepts/query_execution/federated_query/greenplum.md#limitations)
+- [Microsoft SQL Server](../concepts/query_execution/federated_query/ms_sql_server.md#limitations)
+- [MySQL](../concepts/query_execution/federated_query/mysql.md#limitations)
+- [PostgreSQL](../concepts/query_execution/federated_query/postgresql.md#limitations)
+- [YDB](../concepts/query_execution/federated_query/ydb.md#limitations)
+>>>>>>> b2f739a15b7 (DOCSUP-124430: Переводы Февраля - 1. Организация процесса перевода (1 архив) (1 шт.) (#35166))
 
 ```sql
 -- Параметры (для примера — как переменные)
