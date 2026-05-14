@@ -11,6 +11,7 @@ RECURSE(
     observability
     params
     result
+    result_ranges
     table
     value
 )
