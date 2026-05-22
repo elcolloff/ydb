@@ -49,7 +49,7 @@ struct TConnection: TSimpleRefCount<TConnection> {
 };
 
 struct TBroadcastConnection: public TConnection {
-    TBroadcastConnection(ui32 outputIndex = 0)
+    TBroadcastConnection(ui32 outputIndex)
         : TConnection("Broadcast", outputIndex) {
     }
     virtual TExprNode::TPtr BuildConnection(TExprNode::TPtr inputStage, TPositionHandle pos, TExprContext& ctx) override;
@@ -59,7 +59,7 @@ struct TBroadcastConnection: public TConnection {
 };
 
 struct TMapConnection: public TConnection {
-    TMapConnection(ui32 outputIndex = 0)
+    TMapConnection(ui32 outputIndex)
         : TConnection("Map", outputIndex) {
     }
     virtual TExprNode::TPtr BuildConnection(TExprNode::TPtr inputStage, TPositionHandle pos, TExprContext& ctx) override;
@@ -69,7 +69,7 @@ struct TMapConnection: public TConnection {
 };
 
 struct TUnionAllConnection: public TConnection {
-    TUnionAllConnection(ui32 outputIndex = 0, bool parallel = false)
+    TUnionAllConnection(ui32 outputIndex, bool parallel = false)
         : TConnection("UnionAll", outputIndex)
         , Parallel(parallel) {
     }
@@ -103,7 +103,7 @@ struct TShuffleConnection: public TConnection {
 };
 
 struct TMergeConnection: public TConnection {
-    TMergeConnection(const TVector<TSortElement>& order, ui32 outputIndex = 0)
+    TMergeConnection(const TVector<TSortElement>& order, ui32 outputIndex)
         : TConnection("Merge", outputIndex)
         , Order(order) {
     }
