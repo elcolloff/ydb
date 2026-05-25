@@ -97,10 +97,8 @@ TIntrusivePtr<IOperator> MaybePushToStageAndUpdateConnection(TIntrusivePtr<TOpSo
         return sort;
     }
 
-    const auto connections = planProps.StageGraph.GetConnections(prevStageId, currentStageId);
-    Y_ENSURE(connections.size() == 1);
-    const auto outputIndex = connections.front()->GetOutputIndex();
-    const auto mergeConnection = MakeIntrusive<TMergeConnection>(sort->GetSortElements(), outputIndex);
+    // Merge connection always has a single consumer (i.e. outputIndex = 0)
+    const auto mergeConnection = MakeIntrusive<TMergeConnection>(sort->GetSortElements(), /*outputIndex=*/0);
     // Update conection type.
     planProps.StageGraph.UpdateConnection(prevStageId, currentStageId, mergeConnection);
     // Push to stage.
