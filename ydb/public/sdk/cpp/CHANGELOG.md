@@ -1,4 +1,5 @@
 * Added a helper to detect specific issue codes within a TStatus (including nested sub-issues) and introduces the CONSTRAINT_VIOLATION issue code constant, intended to make it easier for SDK users to detect primary key / unique index conflicts.
+
 * Added `PartitionWriteSpeedMessagesPerSecond` and `PartitionWriteBurstMessages` to topic create/alter settings and corresponding getters in `TTopicDescription`.
 
 ## v3.18.0
@@ -6,7 +7,6 @@
 * Fixed self thread join core dump in IAM credentials provider
 
 * Fixed some data races in Producer (concurrent access to `PartitionsIndex`)
-
 
 * Added interface for export of metrics and spans, supported plugin for OpenTelemetry
 
