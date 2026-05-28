@@ -11,7 +11,7 @@ RECURSE(
     observability
     params
     result
-    result_ranges
+    row_ranges
     retry_range
     status
     table
