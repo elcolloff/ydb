@@ -13662,7 +13662,7 @@ END DO)",
         for (ui64 i = 0; i < PARALLEL_QUERIES; ++i) {
             results.emplace_back(db.ExecuteQuery(R"(
                 DROP STREAMING QUERY `MyFolder/MyStreamingQuery`;)",
-                NQuery::TTxControl::NoTx()));
+                NQuery::TTxControl::NoTx(), NoRetryExecuteQuerySettings()));
         }
 
         ui64 successCount = 0;
