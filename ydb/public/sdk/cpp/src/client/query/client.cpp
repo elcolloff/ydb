@@ -684,12 +684,12 @@ TAsyncExecuteQueryResult TQueryClient::ExecuteQuery(const std::string& query, co
         NRetry::ERetryIdempotentDefault::False);
 
     return NRetry::RunUnaryWithRetry(*this, retrySettings,
-        [this, query, txControl, settings](TDuration timeout) {
+        [impl = Impl_, query, txControl, settings](TDuration timeout) {
             auto opSettings = settings;
             if (timeout != TDuration::Max()) {
                 opSettings.ClientTimeout(timeout);
             }
-            return Impl_->ExecuteQuery(query, txControl, {}, opSettings);
+            return impl->ExecuteQuery(query, txControl, {}, opSettings);
         });
 }
 
@@ -703,12 +703,12 @@ TAsyncExecuteQueryResult TQueryClient::ExecuteQuery(const std::string& query, co
         NRetry::ERetryIdempotentDefault::False);
 
     return NRetry::RunUnaryWithRetry(*this, retrySettings,
-        [this, query, txControl, params, settings](TDuration timeout) {
+        [impl = Impl_, query, txControl, params, settings](TDuration timeout) {
             auto opSettings = settings;
             if (timeout != TDuration::Max()) {
                 opSettings.ClientTimeout(timeout);
             }
-            return Impl_->ExecuteQuery(query, txControl, params, opSettings);
+            return impl->ExecuteQuery(query, txControl, params, opSettings);
         });
 }
 
@@ -778,12 +778,12 @@ TAsyncFetchScriptResultsResult TQueryClient::FetchScriptResults(const NKikimr::N
         NRetry::ERetryIdempotentDefault::True);
 
     return NRetry::RunUnaryWithRetry(*this, resolvedRetrySettings,
-        [this, operationId, resultSetIndex, settings](TDuration timeout) {
+        [impl = Impl_, operationId, resultSetIndex, settings](TDuration timeout) {
             auto opSettings = settings;
             if (timeout != TDuration::Max()) {
                 opSettings.ClientTimeout(timeout);
             }
-            return Impl_->FetchScriptResults(operationId, resultSetIndex, opSettings);
+            return impl->FetchScriptResults(operationId, resultSetIndex, opSettings);
         });
 }
 

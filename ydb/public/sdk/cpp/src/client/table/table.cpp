@@ -1637,12 +1637,12 @@ TAsyncBulkUpsertResult TTableClient::BulkUpsert(const std::string& table, TValue
     }
 
     return NRetry::RunUnaryWithRetry(*this, retrySettings,
-        [this, table, rowsCopy = rows, settings](TDuration timeout) {
+        [impl = Impl_, table, rowsCopy = rows, settings](TDuration timeout) {
             auto opSettings = settings;
             if (timeout != TDuration::Max()) {
                 opSettings.ClientTimeout(timeout);
             }
-            return Impl_->BulkUpsert(table, TValue{rowsCopy}, opSettings);
+            return impl->BulkUpsert(table, TValue{rowsCopy}, opSettings);
         });
 }
 
@@ -1659,12 +1659,12 @@ TAsyncBulkUpsertResult TTableClient::BulkUpsert(const std::string& table, EDataF
     }
 
     return NRetry::RunUnaryWithRetry(*this, retrySettings,
-        [this, table, format, data, schema, settings](TDuration timeout) {
+        [impl = Impl_, table, format, data, schema, settings](TDuration timeout) {
             auto opSettings = settings;
             if (timeout != TDuration::Max()) {
                 opSettings.ClientTimeout(timeout);
             }
-            return Impl_->BulkUpsert(table, format, data, schema, opSettings);
+            return impl->BulkUpsert(table, format, data, schema, opSettings);
         });
 }
 
@@ -1682,12 +1682,12 @@ TAsyncReadRowsResult TTableClient::ReadRows(const std::string& table, TValue&& r
     const TValue keysCopy = rows;
 
     return NRetry::RunUnaryWithRetry(*this, retrySettings,
-        [this, table, keysCopy, columns, settings](TDuration timeout) {
+        [impl = Impl_, table, keysCopy, columns, settings](TDuration timeout) {
             auto opSettings = settings;
             if (timeout != TDuration::Max()) {
                 opSettings.ClientTimeout(timeout);
             }
-            return Impl_->ReadRows(table, TValue{keysCopy}, columns, opSettings);
+            return impl->ReadRows(table, TValue{keysCopy}, columns, opSettings);
         });
 }
 
