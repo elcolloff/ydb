@@ -736,12 +736,12 @@ NThreading::TFuture<TScriptExecutionOperation> TQueryClient::ExecuteScript(const
         NRetry::ERetryIdempotentDefault::False);
 
     return NRetry::RunUnaryWithRetry(*this, resolvedRetrySettings,
-        [this, script, settings](TDuration timeout) {
+        [impl = Impl_, script, settings](TDuration timeout) {
             auto opSettings = settings;
             if (timeout != TDuration::Max()) {
                 opSettings.ClientTimeout(timeout);
             }
-            return Impl_->ExecuteScript(script, {}, opSettings);
+            return impl->ExecuteScript(script, {}, opSettings);
         });
 }
 
